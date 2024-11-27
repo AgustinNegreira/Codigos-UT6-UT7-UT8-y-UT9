@@ -159,6 +159,51 @@ public class TGrafoDirigido implements IGrafoDirigido {
     }
 
 
+    public LinkedList<TVertice> bpf() {
+        desvisitarVertices();
+        LinkedList<TVertice> res = new LinkedList<>();
+        for (TVertice v : this.vertices.values()) {
+            if (!v.getVisitado()) {
+                v.bpf(res);
+            }
+        }
+        desvisitarVertices();
+        return res;
+    }
+
+    public LinkedList<TVertice> bpf(Comparable etiquetaOrigen) {
+        desvisitarVertices();
+        LinkedList<TVertice> res = new LinkedList<>();
+        TVertice v = this.buscarVertice(etiquetaOrigen);
+        if (v != null) {
+            v.bpf(res);
+        }
+        desvisitarVertices();
+        return res;
+    }
+
+    public LinkedList<TVertice> bpf(TVertice vertice) {
+        desvisitarVertices();
+        LinkedList<TVertice> res = new LinkedList<>();
+        if (this.buscarVertice(vertice.getEtiqueta()) != null) {
+            vertice.bpf(res);
+        }
+        desvisitarVertices();
+        return res;
+    }
+
+    public TCaminos todosLosCaminos(Comparable etiquetaOrigen, Comparable etiquetaDestino) {
+        TCaminos todosLosCaminos = new TCaminos();
+        TVertice verticeOrigen = buscarVertice(etiquetaOrigen);
+
+        if (verticeOrigen != null) {
+            TCamino caminoInicial = new TCamino((TVertice) verticeOrigen);
+            verticeOrigen.todosLosCaminos(etiquetaDestino, caminoInicial, todosLosCaminos);
+        }
+        return todosLosCaminos;
+    }
+
+
     public Double[][] floyd() {
         // Calcula el centro del grafo, es decir, el vértice con la menor distancia máxima a otros vértices.
         int numVertices = vertices.size();
